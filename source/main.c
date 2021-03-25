@@ -7,6 +7,8 @@ const char* OPTIONS[] = { "Output file", "Input consts file", "Mask", "Step", "O
 
 int main(int argc, char** argv)
 {
+    srand(time(NULL));
+
     FILE* file;
     const char* filename;
     if(argc > 1) filename = argv[1];
