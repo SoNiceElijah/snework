@@ -111,7 +111,7 @@ void* progress()
     pthread_exit(NULL);
 }
 
-void calculate(double hsize, unsigned int line, unsigned int steps, FILE* fp, unsigned short mask)
+void calculate(double hsize, unsigned int line, unsigned int steps, unsigned int offset, FILE* fp, unsigned short mask)
 {
     //////////////////////////////////////////////////////////////
     //                      Output format                       //
@@ -173,11 +173,29 @@ void calculate(double hsize, unsigned int line, unsigned int steps, FILE* fp, un
     __m256d* tmp;
 
     int n = 0;
-    unsigned int total = line * steps;
+    unsigned int total = line * steps + offset;
 
     //////////////////////////////////////////////////////////////
     //                          METHOD                          //
     //////////////////////////////////////////////////////////////
+
+    int ii = offset + 1;
+    while(--ii)
+    {
+        tmp = passive;
+        passive = active;
+        active = tmp;
+
+        // passive --- ( +h ) ----> active
+        prestep(passive);
+        makestep(active,passive);
+        poststep(active);
+
+        ++n;
+        pstat = (int)(40.0 * n / total);        
+    }
+
+    
 
     ++steps;
     while(--steps)

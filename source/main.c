@@ -2,8 +2,8 @@
 #include <time.h>
 #include "constant.h"
 
-const int optionsize = 2;
-const char* OPTIONS[] = { "Output file", "Input consts file" };
+const int optionsize = 7;
+const char* OPTIONS[] = { "Output file", "Input consts file", "Mask", "Step", "Offset", "Line", "Length" };
 
 int main(int argc, char** argv)
 {
@@ -18,6 +18,12 @@ int main(int argc, char** argv)
     if(argc > 2) inputname = argv[2];
     else inputname = DEFAULT_INPUT_NAME;
     input = fopen(inputname,"r");
+
+    const int mask = argc > 3 ? atoi(argv[3]) : DEFAULT_MASK;
+    const double step = argc > 4 ? atof(argv[4]) : DEFAULT_STEP;
+    const int offset = argc > 5 ? atoi(argv[5]) : DEFAULT_OFFSET;
+    const int line = argc > 6 ? atoi(argv[6]) : DEFAULT_LINE;
+    const int length = argc > 7 ? atoi(argv[7]) : DEFAULT_LENGTH;
 
     printf("\n[ ---------------{ %s }--------------- ]\n\n","PROC");
 
@@ -36,7 +42,7 @@ int main(int argc, char** argv)
     pthread_t id;
     pthread_create(&id, NULL, progress, NULL);
     clock_t start = clock();
-    calculate(0.01,25,10000,file,0x0FFF);
+    calculate(step,line,length,offset,file,mask);
     clock_t end = clock();
     pthread_join(id, NULL);
     clock_t close = clock();

@@ -3,7 +3,12 @@
 #define __METHOD_H__
 
 #define DEFAULT_OUTPUT_NAME "./res.csv"
-#define DEFAULT_INPUT_NAME "./consts.bin";
+#define DEFAULT_INPUT_NAME "./consts.bin"
+#define DEFAULT_MASK 0x0FFF
+#define DEFAULT_STEP 0.01
+#define DEFAULT_OFFSET 0
+#define DEFAULT_LINE 25
+#define DEFAULT_LENGTH 40000
 
 #define FORMAT_MASK_0 ""
 #define FORMAT_MASK_1 "%.4f\n"
@@ -23,7 +28,7 @@
 #include <immintrin.h>
 #include <pthread.h>
 
-void calculate(double h, unsigned int line, unsigned int steps, FILE* fp, unsigned short mask);
+void calculate(double h, unsigned int line, unsigned int steps, unsigned int offset, FILE* fp, unsigned short mask);
 void* progress();
 
 #endif
