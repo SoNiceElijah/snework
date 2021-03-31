@@ -1,5 +1,6 @@
 #include "method.h"
 #include "function.h"
+#include <unistd.h>
 
 static __m256d k1[3];
 static __m256d k2[3];
@@ -77,7 +78,7 @@ inline static void makestep(__m256d* res, const __m256d p[3])
     add(res,res,p);
 }
 
-inline static void print(const __m256d v[3], int number)
+inline static void sprint(const __m256d v[3], int number)
 {
     printf(format,
         VR(order[0]),VR(order[1]),VR(order[2]),VR(order[3]),
@@ -85,7 +86,7 @@ inline static void print(const __m256d v[3], int number)
         VR(order[8]),VR(order[9]),VR(order[10]),VR(order[11]));
 }
 
-inline static void write(FILE* fp, const __m256d v[3], int number)
+inline static void swrite(FILE* fp, const __m256d v[3], int number)
 {
     fprintf(fp,format,
         VR(order[0]),VR(order[1]),VR(order[2]),VR(order[3]),
@@ -95,8 +96,12 @@ inline static void write(FILE* fp, const __m256d v[3], int number)
 
 void* progress()
 {
+    int lastpstat = pstat;
     do
     {
+        sleep(1);
+        if(pstat == lastpstat) continue;
+
         fflush(stdout);
         int n = pstat;
         printf("[");
@@ -105,6 +110,9 @@ void* progress()
         while(n--) printf(" ");
         printf("] %d %%", (int)(pstat / 0.4));
         printf("\r");
+
+        lastpstat = pstat;
+
     } 
     while(pstat < 40);
 
@@ -218,7 +226,7 @@ void calculate(double hsize, unsigned int line, unsigned int steps, unsigned int
         pstat = (int)(40.0 * n / total);
         
         /* [ output ] ******************/
-        write(fp,active,n);
-        //print(active,n);
+        swrite(fp,active,n);
+        // sprint(active,n);
     }
 }
