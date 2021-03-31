@@ -1,8 +1,13 @@
 
+const path = require('path');
 const MSession = require('./process');
 const crypto = require('crypto');
 const analysis = require('./analysis');
 const { buildmask } = require('./params');
+
+//////////////////////////////////////////////
+///              JOBS SCRIPTS              ///
+//////////////////////////////////////////////
 
 async function gammadgdata()
 {
@@ -20,6 +25,23 @@ async function gammadgdata()
 
     console.log(`JOB ${rand} is done\n`);
     //console.log(res);
+
+    return path.resolve(workdir,id + '.html');
 }
 
-testjob();
+
+//////////////////////////////////////////////
+///                HANDLER                 ///
+//////////////////////////////////////////////
+
+const storage = [];
+storage.push({ name : 'gnd', handler : gammadgdata });
+
+async function invoke(name, args)
+{
+    let h = storage.find(e => e.name === name);
+    if(!h) return null;
+    return await h.handler(args)
+}
+
+module.exports = invoke;

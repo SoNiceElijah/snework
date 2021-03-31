@@ -108,3 +108,6 @@ build
 
 # MyInternalJobs
 snejobs_*
+
+# configuration
+config.json
