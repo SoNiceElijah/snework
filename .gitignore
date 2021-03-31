@@ -105,3 +105,6 @@ dist
 
 # CMake default dir
 build
+
+# MyInternalJobs
+snejobs_*
