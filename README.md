@@ -48,7 +48,7 @@ cmake --build . --target sneapp --parallel 4 --config Release
 | Argument | Default | Description |
 | --- | --- | --- |
 | **output path** | ./res.csv | Specifies output file path |
-| **input file** | ./consts.bin | Specified input file path |
+| **input file** | ./consts.bin | Specifies input file path |
 | **mask** | 0x0FFF | Output values mask. Bit set to 1 => vector element will be included in output |
 | **step** | 0.01 | RK-4 method step |
 | **offset** | 0 | Number of steps that will be skipped |
