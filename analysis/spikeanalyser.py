@@ -13,7 +13,7 @@ f = open(metafile,)
 meta = json.load(f)
 f.close()
 
-result = open(f"{outputdir}/{meta[0]['options']['pid']}","w")
+result = open(f"{outputdir}/{meta[0]['options']['id']}","w")
 
 # point[0] = time
 # point[1] = v
@@ -73,7 +73,7 @@ for m in meta:
 fig = make_subplots(rows=1, cols=1)
 fig.add_trace(go.Scatter(y=y1s,x=x1s,mode="markers", name="Yd"),row=1,col=1)
 fig.add_trace(go.Scatter(y=y2s,x=x2s,mode="markers", name="Yg"),row=1,col=1)
-fig.write_html(f"{outputdir}/{meta[0]['options']['pid']}.html")
+fig.write_html(f"{outputdir}/{meta[0]['options']['id']}.html")
 
 result.close()
     

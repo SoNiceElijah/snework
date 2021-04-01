@@ -111,3 +111,6 @@ snejobs_*
 
 # configuration
 config.json
+
+# vs code
+.vscode
