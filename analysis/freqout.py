@@ -24,6 +24,9 @@ y1s = []
 x2s = []
 y2s = []
 
+x3s = []
+y3s = []
+
 for m in meta:
 
     threshold = 10;
@@ -44,22 +47,8 @@ for m in meta:
             under = False
 
         if(point[1] < prevpoint[1] and spike):
-            spikec += 1
-            dt = point[0] - lastt
-            #con
-            dt /= 1000
-            lastt = point[0]
-            xcoord = m['params']['gammag'] if m['params']['gammag'] < 0 else m['params']['gammad']
-            #print
-            if  m['params']['gammag'] < 0:
-                x1s.append(xcoord)
-                y1s.append(dt)
-            else:
-                x2s.append(xcoord)
-                y2s.append(dt)
-            #write
-            result.write(f"{xcoord}, {dt}\n")
             
+            spikec += 1           
             spike = False
 
         if(point[1] < threshold and not under):
@@ -67,12 +56,34 @@ for m in meta:
 
         prevpoint = point
 
+    l = m['options']['step'] * m['options']['line'] * m['options']['length'] / 1000
+
+    print(spikec)
+
+    xcoord = m['params']['fin']
+    xcoord = round((1 / xcoord) * 1000) 
+    ycoord = spikec / l
+
+    if  m['params']['gammag'] == 0 and m['params']['gammad'] == 0:
+        x1s.append(xcoord)
+        y1s.append(ycoord)
+    elif m['params']['gammag'] == -2 or m['params']['gammad'] == 2:
+        x2s.append(xcoord)
+        y2s.append(ycoord)
+    elif m['params']['gammag'] == -5 or m['params']['gammad'] == 5:
+        x3s.append(xcoord)
+        y3s.append(ycoord)
+
+    #write
+    result.write(f"{xcoord}, {ycoord}\n")
+
     data.close()
 
 
 fig = make_subplots(rows=1, cols=1)
-fig.add_trace(go.Scatter(y=y1s,x=x1s,mode="markers", name="Yg"),row=1,col=1)
-fig.add_trace(go.Scatter(y=y2s,x=x2s,mode="markers", name="Yd"),row=1,col=1)
+fig.add_trace(go.Scatter(y=y1s,x=x1s,mode="lines+markers", name="line_1"),row=1,col=1)
+fig.add_trace(go.Scatter(y=y2s,x=x2s,mode="lines+markers", name="line_2"),row=1,col=1)
+fig.add_trace(go.Scatter(y=y3s,x=x3s,mode="lines+markers", name="line_3"),row=1,col=1)
 fig.write_html(f"{outputdir}/{meta[0]['options']['id']}.html")
 
 result.close()

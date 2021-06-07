@@ -44,28 +44,28 @@ for m in meta:
             under = False
 
         if(point[1] < prevpoint[1] and spike):
-            spikec += 1
-            dt = point[0] - lastt
-            #con
-            dt /= 1000
-            lastt = point[0]
-            xcoord = m['params']['gammag'] if m['params']['gammag'] < 0 else m['params']['gammad']
-            #print
-            if  m['params']['gammag'] < 0:
-                x1s.append(xcoord)
-                y1s.append(dt)
-            else:
-                x2s.append(xcoord)
-                y2s.append(dt)
-            #write
-            result.write(f"{xcoord}, {dt}\n")
             
+            spikec += 1           
             spike = False
 
         if(point[1] < threshold and not under):
             under = True
 
         prevpoint = point
+
+    xcoord = m['params']['gammag'] if m['params']['gammag'] < 0 else m['params']['gammad']
+
+    l = m['options']['step'] * m['options']['line'] * m['options']['length'] / 1000
+    print(l)
+
+    if  m['params']['gammag'] < 0:
+        x1s.append(xcoord)
+        y1s.append(spikec / l)
+    else:
+        x2s.append(xcoord)
+        y2s.append(spikec / l)
+    #write
+    result.write(f"{xcoord}, {spikec / prevpoint[0]}\n")
 
     data.close()
 
